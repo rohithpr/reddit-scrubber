@@ -125,7 +125,7 @@ dmypy.json
 .pyre/
 
 # PRAW secrets
-praw.ini
+credentials.ini
 
 # Node
 node_modules/*
