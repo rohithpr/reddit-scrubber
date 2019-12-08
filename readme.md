@@ -1,56 +1,28 @@
 # Reddit Scrubber
 
-A serverless app that runs periodically on AWS Lambda to delete old comments and posts from Reddit.
-
-## Useful commands
+A Python 3 - [serverless](https://serverless.com/) app that runs periodically on AWS Lambda to delete old content of yours from Reddit.
 
 
-### Install `pre-commit`, it's hooks and run it
+## Architecture and Overview
 
-```sh
-pip install pre-commit
-pre-commit install
-pre-commit run -a
-```
+This project is built using the [serverless](https://serverless.com/) framework. The application stack is deployed with the help of a CloudFormation template - some of which is defined it the `serverless.yml` file.
 
-### Install the plugin `serverless-python-requirements`
+A CloudWatch Scheduled Event triggers the Lambda function periodically at an interval as defined in `serverless.yml`. `handler.py:main` is the entry point for the execution of this app.
 
-```sh
-sls plugin install -n serverless-python-requirements
-```
+The user's credentials are read from the file `credentials.ini`, to instantiate a [PRAW](https://github.com/praw-dev/praw) object which is used to communicate with Reddit.
 
-### Install pre-commit hooks
+Configuration of when and which content to delete are read from the file `config.yaml`. Some default rules are hardcoded (all content older than 7 days) in the codebase to ensure that the application can be deployed with minimal configuration.
 
-```sh
-pre-commit install
-```
 
-### Deploy the application to AWS
+## Getting started
 
-```sh
-sls deploy -v
-```
+- Install `serverless`, `serverless-python-requirements` and `docker` (it is a requirement for the plugin to work correctly). These, and many other useful commands can be found in `docs/help.md`.
+- Copy the contents of `example-credentials.ini` to `credentials.ini` and fill it in. If this is your first time using a PRAW based app, [PRAW documentation](https://praw.readthedocs.io/en/latest/getting_started/configuration.html) will help you configure the file. This file name has been added to `.gitignore` so that you don't have to worry about accidentally adding your credentials to git history.
+- Copy the contents of `example-config.yaml` to `config.yaml` and extend it to set up your own rules on when content should be deleted.
+- Deploy the app using the command `sls deploy -v`.
 
-### Deploy only function changes to AWS
 
-```sh
-sls deploy function -f scrubber -v
-```
+## Potential Future Enhancements
 
-### Invoke function
-
-```sh
-sls invoke -f scrubber -l
-```
-
-### Tail logs
-
-```sh
-sls logs -f scrubber -t
-```
-
-### Teardown the app
-
-```sh
-sls remove
-```
+- Store metrics of content deleted
+- Send a periodic email notification with these metrics
