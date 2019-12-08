@@ -1,0 +1,7 @@
+default:
+  max_age_days: 7
+  skip_delete_pattern: "save-this"
+  
+r/subreddit:
+  max_age_days: 2
+  skip_delete_pattern: ""

@@ -127,6 +127,9 @@ dmypy.json
 # PRAW secrets
 credentials.ini
 
+# Project config
+config.yaml
+
 # Node
 node_modules/*
 
